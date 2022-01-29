@@ -58,6 +58,9 @@ public class Product {
 	
 	@Column(name = "buy_price", nullable = false)
 	private BigDecimal buyPrice;
+	
+	@Column(name = "image", nullable = false)
+	private String image;
 
 	public Product() {
 		super();
@@ -66,7 +69,7 @@ public class Product {
 
 	public Product(int id, List<OrderDetail> orderDetails, List<ProductImage> productImages, String productCode,
 			String productName, String productDescription, ProductLine productLineObj, String productSize,
-			String productVendor, int quantityInStock, BigDecimal buyPrice) {
+			String productVendor, int quantityInStock, BigDecimal buyPrice, String image) {
 		super();
 		this.id = id;
 		this.orderDetails = orderDetails;
@@ -79,6 +82,16 @@ public class Product {
 		this.productVendor = productVendor;
 		this.quantityInStock = quantityInStock;
 		this.buyPrice = buyPrice;
+		this.image = image;
+	}
+
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public String getProductSize() {
