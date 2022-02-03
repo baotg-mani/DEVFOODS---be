@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -59,6 +60,63 @@ public class ProductController {
 			System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	// get all product size M for 1st page
+	@GetMapping("/product/shop/page1")
+	public ResponseEntity<Object> getProductsForPage1() {
+		try {
+			return new ResponseEntity<>(pProductRepository.findProduct4Page1(), HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	// get all product size M for 2nd page
+	@GetMapping("/product/shop/page2")
+	public ResponseEntity<Object> getProductsForPage2() {
+		try {
+			return new ResponseEntity<>(pProductRepository.findProduct4Page2(), HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	// get all product size M for 3rd page
+	@GetMapping("/product/shop/page3")
+	public ResponseEntity<Object> getProductsForPage3() {
+		try {
+			return new ResponseEntity<>(pProductRepository.findProduct4Page3(), HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	// get Vegetables
+	@GetMapping("/product/vegetables")
+	public ResponseEntity<Object> getVegetables() {
+		return new ResponseEntity<>(pProductRepository.findVegetables(), HttpStatus.OK);
+	}
+
+	// get Fruits
+	@GetMapping("/product/fruits")
+	public ResponseEntity<Object> getFruits() {
+		return new ResponseEntity<>(pProductRepository.findFruits(), HttpStatus.OK);
+	}
+
+	// get Juice
+	@GetMapping("/product/juice")
+	public ResponseEntity<Object> getJuice() {
+		return new ResponseEntity<>(pProductRepository.findJuice(), HttpStatus.OK);
+	}
+
+	// get Dried
+	@GetMapping("/product/dried")
+	public ResponseEntity<Object> getDried() {
+		return new ResponseEntity<>(pProductRepository.findDried(), HttpStatus.OK);
 	}
 
 	@PostMapping("/product/{productLineId}")
