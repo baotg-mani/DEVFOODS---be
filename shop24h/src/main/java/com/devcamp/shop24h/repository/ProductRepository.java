@@ -31,7 +31,38 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 	@Query(value = "SELECT * FROM products ORDER BY id DESC", nativeQuery = true)
 	List<Product> findAllProduct();
-	
+
 	@Query(value = "SELECT * FROM products AS p WHERE p.product_line_id LIKE :paramProductLineId ORDER BY p.id DESC", nativeQuery = true)
-	List<Product> findProductsByProductLineId(@Param (value = "paramProductLineId") Integer productLineId, Pageable pageable);
+	List<Product> findProductsByProductLineId(@Param(value = "paramProductLineId") Integer productLineId,
+			Pageable pageable);
+
+	// get data product size M for 1st page
+	@Query(value = "SELECT * FROM products WHERE product_size LIKE 'M' LIMIT 0,12;", nativeQuery = true)
+	List<Product> findProduct4Page1();
+
+	// get data product size M for 2nd page
+	@Query(value = "SELECT * FROM products WHERE product_size LIKE 'M' LIMIT 12,12;", nativeQuery = true)
+	List<Product> findProduct4Page2();
+
+	// get data product size M for 3rd page
+	@Query(value = "SELECT * FROM products WHERE product_size LIKE 'M' LIMIT 25,12;", nativeQuery = true)
+	List<Product> findProduct4Page3();
+
+	// get data product of line Vegetables
+	@Query(value = "SELECT * FROM products WHERE product_line_id LIKE 1 AND product_size LIKE 'M' LIMIT 0,12;", nativeQuery = true)
+	List<Product> findVegetables();
+
+	// get data product of line Fruits
+	@Query(value = "SELECT * FROM products WHERE product_line_id LIKE 2 AND product_size LIKE 'M' LIMIT 0,12;", nativeQuery = true)
+	List<Product> findFruits();
+
+	// get data product of line Juice
+	@Query(value = "SELECT * FROM products WHERE product_line_id LIKE 3 AND product_size LIKE 'M' LIMIT 0,12;", nativeQuery = true)
+	List<Product> findJuice();
+
+	// get data product of line Dried
+	@Query(value = "SELECT * FROM products WHERE product_line_id LIKE 4 AND product_size LIKE 'M' LIMIT 0,12;", nativeQuery = true)
+	List<Product> findDried();
+	
+
 }
