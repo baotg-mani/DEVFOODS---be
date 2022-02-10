@@ -118,7 +118,13 @@ public class ProductController {
 	public ResponseEntity<Object> getDried() {
 		return new ResponseEntity<>(pProductRepository.findDried(), HttpStatus.OK);
 	}
-
+	
+	// get Product by productName and size
+	@GetMapping("/product/{productName}/{size}")
+	public ResponseEntity<Object> getProductByNameAndSize(@PathVariable("productName") String productName, @PathVariable("size") String size) {
+		return new ResponseEntity<>(pProductRepository.timProductByNameAndSize(productName, size), HttpStatus.OK);
+	}
+ 
 	@PostMapping("/product/{productLineId}")
 	public ResponseEntity<Object> createProductByProductLineId(@Valid @RequestBody Product cProduct,
 			@PathVariable Integer productLineId) {

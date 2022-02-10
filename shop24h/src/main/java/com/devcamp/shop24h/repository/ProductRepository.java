@@ -63,6 +63,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	// get data product of line Dried
 	@Query(value = "SELECT * FROM products WHERE product_line_id LIKE 4 AND product_size LIKE 'M' LIMIT 0,12;", nativeQuery = true)
 	List<Product> findDried();
-	
 
+	// get data product by productName and size
+	@Query(value = "SELECT * FROM products AS pro WHERE pro.product_name LIKE :productName AND pro.product_size LIKE :size", nativeQuery = true)
+	Product timProductByNameAndSize(@Param(value = "productName") String productName,
+			@Param(value = "size") String size);
 }
