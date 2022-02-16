@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import com.devcamp.shop24h.model.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
+	Customer findByPhoneNumber(String phone);
 
 	// JPA Query Native SQL
 	@Query(value = "SELECT * FROM customers  WHERE first_name LIKE :firstname OR lastname LIKE :lastname ORDER BY customers.id DESC", nativeQuery = true)

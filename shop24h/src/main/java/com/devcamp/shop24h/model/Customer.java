@@ -40,7 +40,7 @@ public class Customer {
 	private String lastName;
 
 	@NotEmpty(message = "Thiếu phone number!")
-	@Column(name = "phone_number", nullable = false)
+	@Column(name = "phone_number", nullable = false, unique = true)
 	private String phoneNumber;
 
 	@Column(name = "postal_code")
