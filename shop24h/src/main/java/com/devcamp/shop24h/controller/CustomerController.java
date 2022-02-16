@@ -24,7 +24,7 @@ import com.devcamp.shop24h.repository.CustomerRepository;
 public class CustomerController {
 	@Autowired
 	private CustomerRepository pCustomerRepository;
-	
+
 	@GetMapping("/customer/all")
 	public ResponseEntity<Object> getAllCustomer() {
 		try {
@@ -34,9 +34,9 @@ public class CustomerController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/customer/{id}")
-	public ResponseEntity<Object> getCustomerById(@PathVariable int id){
+	public ResponseEntity<Object> getCustomerById(@PathVariable int id) {
 		try {
 			return new ResponseEntity<>(pCustomerRepository.findById(id), HttpStatus.OK);
 		} catch (Exception e) {
@@ -44,7 +44,7 @@ public class CustomerController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	// GET số lượng customer theo 4 nước usa, singapore, france, pain
 	@GetMapping("/number-countries")
 	public ResponseEntity<Object> countCusOf4Countries() {
@@ -55,31 +55,53 @@ public class CustomerController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@PostMapping("/customer") 
-	public ResponseEntity<Object> createCustomer(@RequestBody @Valid Customer cCustomer){
+
+	@PostMapping("/customer")
+	public ResponseEntity<Object> createCustomer(@RequestBody @Valid Customer cCustomer) {
+		Optional<Customer> customerData = Optional.ofNullable((pCustomerRepository.findByPhoneNumber(cCustomer.getPhoneNumber())));
+		if (customerData.isPresent()) {
+			// update dữ liệu nếu sđt đã có trong DB
+			Customer updateObj = customerData.get();
+
+			updateObj.setAddress(cCustomer.getAddress());
+			updateObj.setCity(cCustomer.getCity());
+			updateObj.setCountry(cCustomer.getCountry());
+			updateObj.setCreditLimit(cCustomer.getCreditLimit());
+			updateObj.setFirstName(cCustomer.getFirstName());
+			updateObj.setLastName(cCustomer.getLastName());
+			updateObj.setPhoneNumber(cCustomer.getPhoneNumber());
+			updateObj.setPostalCode(cCustomer.getPostalCode());
+			updateObj.setSalesRepEmployeeNumber(cCustomer.getSalesRepEmployeeNumber());
+			updateObj.setState(cCustomer.getState());
+			pCustomerRepository.save(updateObj);
+			
+			return new ResponseEntity<>(customerData.get().getId(), HttpStatus.OK);
+			
+		} else {
+			// nếu không trùng thì thêm mới
+			Customer vCustomer = new Customer();
+
+			vCustomer.setAddress(cCustomer.getAddress());
+			vCustomer.setCity(cCustomer.getCity());
+			vCustomer.setCountry(cCustomer.getCountry());
+			vCustomer.setCreditLimit(cCustomer.getCreditLimit());
+			vCustomer.setFirstName(cCustomer.getFirstName());
+			vCustomer.setLastName(cCustomer.getLastName());
+			vCustomer.setPhoneNumber(cCustomer.getPhoneNumber());
+			vCustomer.setPostalCode(cCustomer.getPostalCode());
+			vCustomer.setSalesRepEmployeeNumber(cCustomer.getSalesRepEmployeeNumber());
+			vCustomer.setState(cCustomer.getState());
+
+			pCustomerRepository.save(vCustomer);
 			try {
-				Customer vCustomer = new Customer();
-				
-				vCustomer.setAddress(cCustomer.getAddress());
-				vCustomer.setCity(cCustomer.getCity());
-				vCustomer.setCountry(cCustomer.getCountry());
-				vCustomer.setCreditLimit(cCustomer.getCreditLimit());
-				vCustomer.setFirstName(cCustomer.getFirstName());
-				vCustomer.setLastName(cCustomer.getLastName());
-				vCustomer.setPhoneNumber(cCustomer.getPhoneNumber());
-				vCustomer.setPostalCode(cCustomer.getPostalCode());
-				vCustomer.setSalesRepEmployeeNumber(cCustomer.getSalesRepEmployeeNumber());
-				vCustomer.setState(cCustomer.getState());
-				
-				pCustomerRepository.save(vCustomer);
 				return new ResponseEntity<>(pCustomerRepository.findAll(), HttpStatus.OK);
 			} catch (Exception e) {
 				System.out.println(e.getCause().getCause().getMessage());
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+		}
 	}
-	
+
 	@PutMapping("/customer/{id}")
 	public ResponseEntity<Object> updateCustomer(@PathVariable Integer id, @RequestBody Customer cCustomer) {
 		Optional<Customer> customerData = pCustomerRepository.findById(id);
@@ -96,9 +118,9 @@ public class CustomerController {
 				newUpdate.setPostalCode(cCustomer.getPostalCode());
 				newUpdate.setSalesRepEmployeeNumber(cCustomer.getSalesRepEmployeeNumber());
 				newUpdate.setState(cCustomer.getState());
-				
+
 				return new ResponseEntity<>(pCustomerRepository.save(newUpdate), HttpStatus.OK);
-			} catch(Exception e) {
+			} catch (Exception e) {
 				System.out.println(e.getCause().getCause().getMessage());
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
@@ -107,7 +129,7 @@ public class CustomerController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@DeleteMapping("/customer/{id}")
 	public ResponseEntity<Object> deleteCustomerById(@PathVariable Integer id) {
 		if (pCustomerRepository.findById(id).isPresent()) {
