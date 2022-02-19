@@ -63,6 +63,18 @@ public class OrderDetailController {
 		}
 	}
 
+	// Get data cho bar chart đơn theo ngày trong tuần gần nhất
+	@GetMapping("/order-detail/day-of-week")
+	public ResponseEntity<Object> getDataBarChartInWeek() {
+		try {
+			return new ResponseEntity<>(pOrderDetailRepository.findDataBarChartInWeek(), HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
 	@PostMapping("/order-detail/{orderId}/{productId}")
 	public ResponseEntity<Object> createOrderDetailByOrderIdAndProductId(@Valid @PathVariable Integer orderId,
 			@PathVariable Integer productId, @RequestBody @Valid OrderDetail cOrderDetail) {
