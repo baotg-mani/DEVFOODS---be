@@ -32,4 +32,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
 		
 		@Query(value = "SELECT * FROM order_details WHERE order_details.order_id LIKE :paramOrderId ORDER BY order_details.id DESC", nativeQuery = true)
 		List<OrderDetail> findOrderDetailsByOrderId(@Param("paramOrderId") Integer orderId, Pageable pageable);
+		
+		@Query(value = "SELECT DAYOFWEEK(o.order_date), o.order_date, od.product_id, SUM(od.price_each * od.quantity_order) AS price_all FROM order_details AS od\r\n"
+				+ "JOIN orders AS o ON od.order_id = o.id GROUP BY o.order_date ORDER BY o.order_date DESC LIMIT 0, 7", nativeQuery = true)
+		List<Object> findDataBarChartInWeek();
 }

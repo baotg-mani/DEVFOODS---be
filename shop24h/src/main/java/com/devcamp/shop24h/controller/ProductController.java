@@ -137,6 +137,8 @@ public class ProductController {
 			vProduct.setProductCode(cProduct.getProductCode());
 			vProduct.setProductName(cProduct.getProductName());
 			vProduct.setProductDescription(cProduct.getProductDescription());
+			vProduct.setProductSize(cProduct.getProductSize());
+			vProduct.setImage(cProduct.getImage());
 			vProduct.setProductVendor(cProduct.getProductVendor());
 			vProduct.setQuantityInStock(cProduct.getQuantityInStock());
 			vProduct.setProductLineObj(productLineData.get()); // memo!
@@ -162,6 +164,7 @@ public class ProductController {
 			newUpdate.setProductCode(cProduct.getProductCode());
 			newUpdate.setProductName(cProduct.getProductName());
 			newUpdate.setProductDescription(cProduct.getProductDescription());
+			newUpdate.setImage(cProduct.getImage());
 			newUpdate.setProductVendor(cProduct.getProductVendor());
 			newUpdate.setQuantityInStock(cProduct.getQuantityInStock());
 
