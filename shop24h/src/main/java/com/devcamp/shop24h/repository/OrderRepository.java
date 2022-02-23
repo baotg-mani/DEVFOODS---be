@@ -38,4 +38,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
 	@Query(value = "SELECT o.id, pr.product_name, CONCAT(cu.first_name, ' ', cu.first_name) AS fullname_customer FROM orders AS o JOIN order_details AS od ON od.order_id = o.id JOIN customers AS cu ON cu.id = o.customer_id JOIN products AS pr ON pr.id = od.product_id ORDER BY o.id DESC", nativeQuery = true)
 	List<Object> findOrdersByCustomerName();
+	
+	// method get data (Customer by Order & Payment) by query SQL
+	@Query(value = "SELECT o.customer_id, o.id as order_id, CONCAT( cu.last_name ,' ', cu.first_name ) AS fullname, COUNT(o.customer_id), SUM( od.price_each * od.quantity_order ) AS price_all FROM orders AS o JOIN customers AS cu ON o.customer_id = cu.id JOIN order_details AS od ON od.order_id = o.id GROUP BY o.customer_id ORDER BY COUNT(o.customer_id) ASC", nativeQuery = true)
+	List<Object> findCustomer();
+	
+
 }
