@@ -35,5 +35,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
 		
 		@Query(value = "SELECT DAYOFWEEK(o.order_date), o.order_date, od.product_id, SUM(od.price_each * od.quantity_order) AS price_all FROM order_details AS od\r\n"
 				+ "JOIN orders AS o ON od.order_id = o.id GROUP BY o.order_date ORDER BY o.order_date DESC LIMIT 0, 7", nativeQuery = true)
-		List<Object> findDataBarChartInWeek();
+		List<Object> findDataBarChartByDay();
+		
+		@Query(value = "SELECT EXTRACT(WEEK FROM o.order_date) AS week_col, o.order_date, SUM( od.price_each * od.quantity_order ) AS price_all FROM order_details AS od JOIN orders AS o ON od.order_id = o.id GROUP BY week_col ORDER BY o.order_date DESC LIMIT 0, 4", nativeQuery = true)
+		List<Object> findDataBarChartByWeek();
 }

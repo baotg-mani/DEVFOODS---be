@@ -69,6 +69,18 @@ public class OrderController {
 		}
 	}
 	
+	// get data Customer by query SQL (for bar chart)
+	@GetMapping("/order/customer")
+	public ResponseEntity<Object> getCustomer() {
+		try {
+			return new ResponseEntity<>(pOrderRepository.findCustomer(), HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
 	// check lai, return 1 array chua cac array, chua dua len duoc DataTale
 	@PostMapping("/order/{customerId}") 
 	public ResponseEntity<Object> createOrderByCustomerId(@Valid @PathVariable Integer customerId, @RequestBody Order cOrder){
