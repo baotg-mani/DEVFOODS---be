@@ -15,6 +15,13 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "order_details")
 public class OrderDetail {
@@ -42,60 +49,74 @@ public class OrderDetail {
 	@JsonIgnoreProperties(value = "orderDetails")
 	private Product product;
 
-	public OrderDetail() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public OrderDetail(int id, @NotNull int quantityOrder, @NotNull BigDecimal priceEach, Order order,
-			Product product) {
-		super();
-		this.id = id;
-		this.quantityOrder = quantityOrder;
-		this.priceEach = priceEach;
-		this.order = order;
-		this.product = product;
-	}
-
+	/**
+	 * @return the id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * @param id the id to set
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return the quantityOrder
+	 */
 	public int getQuantityOrder() {
 		return quantityOrder;
 	}
 
+	/**
+	 * @param quantityOrder the quantityOrder to set
+	 */
 	public void setQuantityOrder(int quantityOrder) {
 		this.quantityOrder = quantityOrder;
 	}
 
+	/**
+	 * @return the priceEach
+	 */
 	public BigDecimal getPriceEach() {
 		return priceEach;
 	}
 
+	/**
+	 * @param priceEach the priceEach to set
+	 */
 	public void setPriceEach(BigDecimal priceEach) {
 		this.priceEach = priceEach;
 	}
 
+	/**
+	 * @return the order
+	 */
 	public Order getOrder() {
 		return order;
 	}
 
+	/**
+	 * @param order the order to set
+	 */
 	public void setOrder(Order order) {
 		this.order = order;
 	}
 
+	/**
+	 * @return the product
+	 */
 	public Product getProduct() {
 		return product;
 	}
 
+	/**
+	 * @param product the product to set
+	 */
 	public void setProduct(Product product) {
 		this.product = product;
 	}
-	
 	
 }

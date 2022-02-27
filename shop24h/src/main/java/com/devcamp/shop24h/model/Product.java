@@ -17,6 +17,13 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "products")
 public class Product {
@@ -62,124 +69,171 @@ public class Product {
 	@Column(name = "image", nullable = false)
 	private String image;
 
-	public Product() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Product(int id, List<OrderDetail> orderDetails, List<ProductImage> productImages, String productCode,
-			String productName, String productDescription, ProductLine productLineObj, String productSize,
-			String productVendor, int quantityInStock, BigDecimal buyPrice, String image) {
-		super();
-		this.id = id;
-		this.orderDetails = orderDetails;
-		this.productImages = productImages;
-		this.productCode = productCode;
-		this.productName = productName;
-		this.productDescription = productDescription;
-		this.productLineObj = productLineObj;
-		this.productSize = productSize;
-		this.productVendor = productVendor;
-		this.quantityInStock = quantityInStock;
-		this.buyPrice = buyPrice;
-		this.image = image;
-	}
-
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public String getProductSize() {
-		return productSize;
-	}
-
-	public void setProductSize(String productSize) {
-		this.productSize = productSize;
-	}
-
-	public List<ProductImage> getProductImages() {
-		return productImages;
-	}
-
-	public void setProductImages(List<ProductImage> productImages) {
-		this.productImages = productImages;
-	}
-
-	public String getProductDescription() {
-		return productDescription;
-	}
-
-	public void setProductDescription(String productDescription) {
-		this.productDescription = productDescription;
-	}
-
-	public List<OrderDetail> getOrderDetails() {
-		return orderDetails;
-	}
-
-	public void setOrderDetails(List<OrderDetail> orderDetails) {
-		this.orderDetails = orderDetails;
-	}
-
+	/**
+	 * @return the id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * @param id the id to set
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return the orderDetails
+	 */
+	public List<OrderDetail> getOrderDetails() {
+		return orderDetails;
+	}
+
+	/**
+	 * @param orderDetails the orderDetails to set
+	 */
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	/**
+	 * @return the productImages
+	 */
+	public List<ProductImage> getProductImages() {
+		return productImages;
+	}
+
+	/**
+	 * @param productImages the productImages to set
+	 */
+	public void setProductImages(List<ProductImage> productImages) {
+		this.productImages = productImages;
+	}
+
+	/**
+	 * @return the productCode
+	 */
 	public String getProductCode() {
 		return productCode;
 	}
 
+	/**
+	 * @param productCode the productCode to set
+	 */
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
 	}
 
+	/**
+	 * @return the productName
+	 */
 	public String getProductName() {
 		return productName;
 	}
 
+	/**
+	 * @param productName the productName to set
+	 */
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
 
+	/**
+	 * @return the productDescription
+	 */
+	public String getProductDescription() {
+		return productDescription;
+	}
+
+	/**
+	 * @param productDescription the productDescription to set
+	 */
+	public void setProductDescription(String productDescription) {
+		this.productDescription = productDescription;
+	}
+
+	/**
+	 * @return the productLineObj
+	 */
 	public ProductLine getProductLineObj() {
 		return productLineObj;
 	}
 
+	/**
+	 * @param productLineObj the productLineObj to set
+	 */
 	public void setProductLineObj(ProductLine productLineObj) {
 		this.productLineObj = productLineObj;
 	}
 
+	/**
+	 * @return the productSize
+	 */
+	public String getProductSize() {
+		return productSize;
+	}
+
+	/**
+	 * @param productSize the productSize to set
+	 */
+	public void setProductSize(String productSize) {
+		this.productSize = productSize;
+	}
+
+	/**
+	 * @return the productVendor
+	 */
 	public String getProductVendor() {
 		return productVendor;
 	}
 
+	/**
+	 * @param productVendor the productVendor to set
+	 */
 	public void setProductVendor(String productVendor) {
 		this.productVendor = productVendor;
 	}
 
+	/**
+	 * @return the quantityInStock
+	 */
 	public int getQuantityInStock() {
 		return quantityInStock;
 	}
 
+	/**
+	 * @param quantityInStock the quantityInStock to set
+	 */
 	public void setQuantityInStock(int quantityInStock) {
 		this.quantityInStock = quantityInStock;
 	}
 
+	/**
+	 * @return the buyPrice
+	 */
 	public BigDecimal getBuyPrice() {
 		return buyPrice;
 	}
 
+	/**
+	 * @param buyPrice the buyPrice to set
+	 */
 	public void setBuyPrice(BigDecimal buyPrice) {
 		this.buyPrice = buyPrice;
 	}
-	
+
+	/**
+	 * @return the image
+	 */
+	public String getImage() {
+		return image;
+	}
+
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(String image) {
+		this.image = image;
+	}
 }

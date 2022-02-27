@@ -14,6 +14,13 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "product_lines")
 public class ProductLine {
@@ -31,49 +38,60 @@ public class ProductLine {
 	@JsonIgnoreProperties(value = "productLineObj")
 	private List<Product> products;
 
-	public ProductLine() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public ProductLine(int id, String productLine, String description, List<Product> products) {
-		super();
-		this.id = id;
-		this.productLine = productLine;
-		this.description = description;
-		this.products = products;
-	}
-
+	/**
+	 * @return the id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * @param id the id to set
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return the productLine
+	 */
 	public String getProductLine() {
 		return productLine;
 	}
 
+	/**
+	 * @param productLine the productLine to set
+	 */
 	public void setProductLine(String productLine) {
 		this.productLine = productLine;
 	}
 
+	/**
+	 * @return the description
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * @param description the description to set
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/**
+	 * @return the products
+	 */
 	public List<Product> getProducts() {
 		return products;
 	}
 
+	/**
+	 * @param products the products to set
+	 */
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
-	
+
 }
