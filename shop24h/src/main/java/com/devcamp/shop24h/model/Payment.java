@@ -20,6 +20,13 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "payments")
 public class Payment {
@@ -47,58 +54,74 @@ public class Payment {
 	@JsonIgnoreProperties(value = "payments")
 	private Customer customer;
 
-	public Payment() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Payment(int id, @NotEmpty(message = "Thiếu checkNumber!") String checkNumber, @NotNull Date paymentDate,
-			@NotNull BigDecimal amount, Customer customer) {
-		super();
-		this.id = id;
-		this.checkNumber = checkNumber;
-		this.paymentDate = paymentDate;
-		this.amount = amount;
-		this.customer = customer;
-	}
-
+	/**
+	 * @return the id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * @param id the id to set
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return the checkNumber
+	 */
 	public String getCheckNumber() {
 		return checkNumber;
 	}
 
+	/**
+	 * @param checkNumber the checkNumber to set
+	 */
 	public void setCheckNumber(String checkNumber) {
 		this.checkNumber = checkNumber;
 	}
 
+	/**
+	 * @return the paymentDate
+	 */
 	public Date getPaymentDate() {
 		return paymentDate;
 	}
 
+	/**
+	 * @param paymentDate the paymentDate to set
+	 */
 	public void setPaymentDate(Date paymentDate) {
 		this.paymentDate = paymentDate;
 	}
 
+	/**
+	 * @return the amount
+	 */
 	public BigDecimal getAmount() {
 		return amount;
 	}
 
+	/**
+	 * @param amount the amount to set
+	 */
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
+	/**
+	 * @return the customer
+	 */
 	public Customer getCustomer() {
 		return customer;
 	}
 
+	/**
+	 * @param customer the customer to set
+	 */
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
+ 
 }

@@ -21,6 +21,13 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -59,85 +66,116 @@ public class Order {
 	@JsonIgnoreProperties(value = "orders")
 	private Customer customer;
 
-	public Order() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Order(int id, String comments, @NotNull Date orderDate, @NotNull Date requiredDate, Date shippedDate,
-			String status, List<OrderDetail> orderDetails, Customer customer) {
-		super();
-		this.id = id;
-		this.comments = comments;
-		this.orderDate = orderDate;
-		this.requiredDate = requiredDate;
-		this.shippedDate = shippedDate;
-		this.status = status;
-		this.orderDetails = orderDetails;
-		this.customer = customer;
-	}
-
+	/**
+	 * @return the id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * @param id the id to set
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return the comments
+	 */
 	public String getComments() {
 		return comments;
 	}
 
+	/**
+	 * @param comments the comments to set
+	 */
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
 
+	/**
+	 * @return the orderDate
+	 */
 	public Date getOrderDate() {
 		return orderDate;
 	}
 
+	/**
+	 * @param orderDate the orderDate to set
+	 */
 	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
 	}
 
+	/**
+	 * @return the requiredDate
+	 */
 	public Date getRequiredDate() {
 		return requiredDate;
 	}
 
+	/**
+	 * @param requiredDate the requiredDate to set
+	 */
 	public void setRequiredDate(Date requiredDate) {
 		this.requiredDate = requiredDate;
 	}
 
+	/**
+	 * @return the shippedDate
+	 */
 	public Date getShippedDate() {
 		return shippedDate;
 	}
 
+	/**
+	 * @param shippedDate the shippedDate to set
+	 */
 	public void setShippedDate(Date shippedDate) {
 		this.shippedDate = shippedDate;
 	}
 
+	/**
+	 * @return the status
+	 */
 	public String getStatus() {
 		return status;
 	}
 
+	/**
+	 * @param status the status to set
+	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
+	/**
+	 * @return the orderDetails
+	 */
 	public List<OrderDetail> getOrderDetails() {
 		return orderDetails;
 	}
 
+	/**
+	 * @param orderDetails the orderDetails to set
+	 */
 	public void setOrderDetails(List<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
 
+	/**
+	 * @return the customer
+	 */
 	public Customer getCustomer() {
 		return customer;
 	}
 
+	/**
+	 * @param customer the customer to set
+	 */
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
+
 }

@@ -1,4 +1,4 @@
-package com.devcam.shop24h.api;
+package com.devcamp.shop24h.controller;
 
 import java.util.List;
 
@@ -7,20 +7,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devcam.shop24h.entity.User;
-import com.devcam.shop24h.repository.UserRepository;
-import com.devcam.shop24h.service.UserService;
+import com.devcamp.shop24h.model.User;
+import com.devcamp.shop24h.repository.UserRepository;
+import com.devcamp.shop24h.service.UserService;
 
 /**
- * @author hieuha
+ * @author baotg
  *
  */
 @RestController
+@CrossOrigin
 public class WithoutAuthorizeController {
 	@Autowired
 	private UserRepository userRepository;
@@ -55,6 +57,7 @@ public class WithoutAuthorizeController {
     @PostMapping("/users/create")
     @PreAuthorize("hasAnyAuthority('USER_CREATE')")
     public User register(@RequestBody User user) {
+    	
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
         return userService.createUser(user);

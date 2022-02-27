@@ -13,6 +13,13 @@ import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "product_images")
 public class ProductImage {
@@ -29,40 +36,46 @@ public class ProductImage {
 	@JsonIgnoreProperties(value = "productImages")
 	private Product product;
 
-	public ProductImage() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public ProductImage(int id, @NotEmpty(message = "Thiếu url ảnh sản phẩm") String url, Product product) {
-		super();
-		this.id = id;
-		this.url = url;
-		this.product = product;
-	}
-
+	/**
+	 * @return the id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * @param id the id to set
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return the url
+	 */
 	public String getUrl() {
 		return url;
 	}
 
+	/**
+	 * @param url the url to set
+	 */
 	public void setUrl(String url) {
 		this.url = url;
 	}
 
+	/**
+	 * @return the product
+	 */
 	public Product getProduct() {
 		return product;
 	}
 
+	/**
+	 * @param product the product to set
+	 */
 	public void setProduct(Product product) {
 		this.product = product;
 	}
-	
+
 }
