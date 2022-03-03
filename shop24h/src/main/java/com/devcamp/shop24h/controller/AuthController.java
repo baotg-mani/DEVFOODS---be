@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import com.devcamp.shop24h.security.JwtUtil;
 import com.devcamp.shop24h.security.UserPrincipal;
 import com.devcamp.shop24h.service.TokenService;
 import com.devcamp.shop24h.service.UserService;
+import com.nimbusds.jwt.JWTClaimsSet;
 
 @RestController
 @CrossOrigin
@@ -30,6 +32,7 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
+    
 
     @PostMapping("/register")
     public User register(@RequestBody User user) {
@@ -43,17 +46,23 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody User user) {
         UserPrincipal userPrincipal = userService.findByUsername(user.getUsername());
         if (null == user || !new BCryptPasswordEncoder().matches(user.getPassword(), userPrincipal.getPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("tài khoản hoặc mật khẩu không chính xác");
+            return ResponseEntity.badRequest().body("tài khoản hoặc mật khẩu không chính xác");
+        } else {
+        	 Token token = new Token();
+             token.setToken(jwtUtil.generateToken(userPrincipal));
+             token.setTokenExpDate(jwtUtil.generateExpirationDate());
+             token.setCreatedBy(userPrincipal.getUserId());
+             tokenService.createToken(token);
+             
+             return ResponseEntity.ok(token.getToken());
         }
-        Token token = new Token();
-        token.setToken(jwtUtil.generateToken(userPrincipal));
-        token.setTokenExpDate(jwtUtil.generateExpirationDate());
-        token.setCreatedBy(userPrincipal.getUserId());
-        tokenService.createToken(token);
-        
-        return ResponseEntity.ok(token.getToken());
     }
 
+//    @GetMapping("/claims/{token}")
+//    public JWTClaimsSet getClaims(@PathVariable String token) {
+//    	return jwtUtil.getClaimsFromToken(token);
+//    }
+    
     
 	/*
 	 * Dùng @PreAuthorize kèm: 

@@ -17,10 +17,6 @@ import com.devcamp.shop24h.model.User;
 import com.devcamp.shop24h.repository.UserRepository;
 import com.devcamp.shop24h.service.UserService;
 
-/**
- * @author baotg
- *
- */
 @RestController
 @CrossOrigin
 public class WithoutAuthorizeController {

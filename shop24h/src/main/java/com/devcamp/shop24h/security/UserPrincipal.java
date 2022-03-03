@@ -14,6 +14,10 @@ public class UserPrincipal implements UserDetails {
     private String password;
     private Collection authorities;
 
+	/*
+	 * các hàm return false bên dưới không dùng trong project này (impl cho đủ của
+	 * interface UserDetails)
+	 */
     @Override
     public boolean isAccountNonExpired() {
         return false;

@@ -17,7 +17,7 @@ import com.devcam.shop24h.repository.UserRepository;
 import com.devcam.shop24h.service.UserService;
 
 /**
- * @author hieuha
+ * @author baotg
  *
  */
 @RestController
