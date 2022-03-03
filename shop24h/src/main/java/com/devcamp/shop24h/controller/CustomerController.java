@@ -17,13 +17,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devcamp.shop24h.model.Customer;
+import com.devcamp.shop24h.model.User;
 import com.devcamp.shop24h.repository.CustomerRepository;
+import com.devcamp.shop24h.repository.UserRepository;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @RestController
 @CrossOrigin
 public class CustomerController {
+	
 	@Autowired
 	private CustomerRepository pCustomerRepository;
+
+	@Autowired
+	private UserRepository pUserRepository;
 
 	@GetMapping("/customer/all")
 	public ResponseEntity<Object> getAllCustomer() {
@@ -45,20 +52,10 @@ public class CustomerController {
 		}
 	}
 
-	// GET số lượng customer theo 4 nước usa, singapore, france, pain
-	@GetMapping("/number-countries")
-	public ResponseEntity<Object> countCusOf4Countries() {
-		try {
-			return new ResponseEntity<>(pCustomerRepository.numberCusOf4Countries(), HttpStatus.OK);
-		} catch (Exception e) {
-			System.out.println(e);
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
 	@PostMapping("/customer")
 	public ResponseEntity<Object> createCustomer(@RequestBody @Valid Customer cCustomer) {
-		Optional<Customer> customerData = Optional.ofNullable((pCustomerRepository.findByPhoneNumber(cCustomer.getPhoneNumber())));
+		Optional<Customer> customerData = Optional
+				.ofNullable((pCustomerRepository.findByPhoneNumber(cCustomer.getPhoneNumber())));
 		if (customerData.isPresent()) {
 			// update dữ liệu nếu sđt đã có trong DB
 			Customer updateObj = customerData.get();
@@ -74,9 +71,9 @@ public class CustomerController {
 			updateObj.setSalesRepEmployeeNumber(cCustomer.getSalesRepEmployeeNumber());
 			updateObj.setState(cCustomer.getState());
 			pCustomerRepository.save(updateObj);
-			
+
 			return new ResponseEntity<>(customerData.get().getId(), HttpStatus.OK);
-			
+
 		} else {
 			// nếu không trùng thì thêm mới
 			Customer vCustomer = new Customer();
@@ -98,6 +95,66 @@ public class CustomerController {
 			} catch (Exception e) {
 				System.out.println(e.getCause().getCause().getMessage());
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+	}
+
+	@PostMapping("/customer/{username}")
+	public ResponseEntity<Object> createCustomerByUsername(@RequestBody @Valid Customer cCustomer,
+			@PathVariable String username) {
+		Optional<Customer> customerData = Optional
+				.ofNullable((pCustomerRepository.findByPhoneNumber(cCustomer.getPhoneNumber())));
+		Optional<User> userData = Optional.ofNullable(pUserRepository.findByUsername(username));
+		
+		if (!customerData.isPresent() && userData.get().getCustomer() == null) {
+			// nếu là lần đầu order, sđt đầu tiên sử dụng => thêm mới customer data
+			Customer vCustomer = new Customer();
+
+			vCustomer.setAddress(cCustomer.getAddress());
+			vCustomer.setCity(cCustomer.getCity());
+			vCustomer.setCountry(cCustomer.getCountry());
+			vCustomer.setCreditLimit(cCustomer.getCreditLimit());
+			vCustomer.setFirstName(cCustomer.getFirstName());
+			vCustomer.setLastName(cCustomer.getLastName());
+			vCustomer.setPhoneNumber(cCustomer.getPhoneNumber());
+			vCustomer.setPostalCode(cCustomer.getPostalCode());
+			vCustomer.setSalesRepEmployeeNumber(cCustomer.getSalesRepEmployeeNumber());
+			vCustomer.setState(cCustomer.getState());
+			vCustomer.setUser(userData.get());
+
+			pCustomerRepository.save(vCustomer);
+			try {
+				return new ResponseEntity<>(pCustomerRepository.save(vCustomer), HttpStatus.CREATED);
+			} catch (Exception e) {
+				System.out.println(e.getCause().getCause().getMessage());
+				return new ResponseEntity<>("1", HttpStatus.BAD_REQUEST);
+			}
+		}
+
+		if (!userData.get().getCustomer().getPhoneNumber().equals(cCustomer.getPhoneNumber())) {
+			// nếu sđt input không trùng với sđt đã có trong DB => báo cho user
+			return new ResponseEntity<>("Wrong phone number", HttpStatus.INTERNAL_SERVER_ERROR);
+		} else {
+			// nếu sđt input trùng với sđt đã có trong DB, update dữ liệu 
+			Customer updateObj = customerData.get();
+
+			updateObj.setAddress(cCustomer.getAddress());
+			updateObj.setCity(cCustomer.getCity());
+			updateObj.setCountry(cCustomer.getCountry());
+			updateObj.setCreditLimit(cCustomer.getCreditLimit());
+			updateObj.setFirstName(cCustomer.getFirstName());
+			updateObj.setLastName(cCustomer.getLastName());
+			updateObj.setPhoneNumber(cCustomer.getPhoneNumber());
+			updateObj.setPostalCode(cCustomer.getPostalCode());
+			updateObj.setSalesRepEmployeeNumber(cCustomer.getSalesRepEmployeeNumber());
+			updateObj.setState(cCustomer.getState());
+			updateObj.setUser(userData.get());
+			pCustomerRepository.save(updateObj);
+			try {
+				return new ResponseEntity<>(customerData.get().getId(), HttpStatus.OK);
+			} catch (Exception e) {
+				System.out.println(e.getCause().getCause().getMessage());
+				return new ResponseEntity<>("2", HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 	}

@@ -1,17 +1,13 @@
 package com.devcamp.shop24h.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "t_user")
 public class User extends BaseEntity {
@@ -24,9 +20,24 @@ public class User extends BaseEntity {
     @JoinTable(name = "t_user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles = new HashSet<>();
     
-    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = true)
+    
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "user")
+//    @JsonManagedReference
     private Customer customer;
+
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public User(String username, String password, Set<Role> roles, Customer customer) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.roles = roles;
+		this.customer = customer;
+	}
 
 	/**
 	 * @return the username

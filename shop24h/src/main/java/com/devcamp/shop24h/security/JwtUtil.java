@@ -42,7 +42,7 @@ public class JwtUtil {
         return new Date(System.currentTimeMillis() + 864000000);
     }
 
-    private JWTClaimsSet getClaimsFromToken(String token) {
+    public JWTClaimsSet getClaimsFromToken(String token) {
         JWTClaimsSet claims = null;
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
@@ -56,6 +56,7 @@ public class JwtUtil {
         return claims;
     }
 
+    // get User từ Token hiện tại
     public UserPrincipal getUserFromToken(String token) {
         UserPrincipal user = null;
         try {
@@ -70,10 +71,13 @@ public class JwtUtil {
         return user;
     }
 
+    // get thời hạn của Token, nếu null => currenttime
     private Date getExpirationDateFromToken(JWTClaimsSet claims) {
         return claims != null ? claims.getExpirationTime() : new Date();
     }
 
+    // check thời gian hết hạn của Token
+    // nếu thời hạn > currenttime => true, otherwise => false
     private boolean isTokenExpired(JWTClaimsSet claims) {
         return getExpirationDateFromToken(claims).after(new Date());
     }

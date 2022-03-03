@@ -9,11 +9,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -67,10 +69,37 @@ public class Customer {
 	@JsonIgnoreProperties(value = "customer")
 	private List<Payment> payments;
 	
-	
-	@OneToOne(mappedBy = "customer", fetch = FetchType.LAZY)
 	@JsonIgnoreProperties(value = "customer")
+	@OneToOne
+	@JoinColumn(name = "user_id")
 	private User user;
+
+	public Customer() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Customer(int id, String address, String city, String country, int creditLimit,
+		@NotEmpty(message = "Thiếu firstname!") String firstName,
+		@NotEmpty(message = "Thiếu lastname!") String lastName,
+		@NotEmpty(message = "Thiếu phone number!") String phoneNumber, String postalCode, int salesRepEmployeeNumber,
+		String state, List<Order> orders, List<Payment> payments, User user) {
+	super();
+	this.id = id;
+	this.address = address;
+	this.city = city;
+	this.country = country;
+	this.creditLimit = creditLimit;
+	this.firstName = firstName;
+	this.lastName = lastName;
+	this.phoneNumber = phoneNumber;
+	this.postalCode = postalCode;
+	this.salesRepEmployeeNumber = salesRepEmployeeNumber;
+	this.state = state;
+	this.orders = orders;
+	this.payments = payments;
+	this.user = user;
+}
 
 
 	/**
