@@ -1,7 +1,14 @@
 package com.devcamp.shop24h.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +27,7 @@ import com.devcamp.shop24h.model.Customer;
 import com.devcamp.shop24h.model.User;
 import com.devcamp.shop24h.repository.CustomerRepository;
 import com.devcamp.shop24h.repository.UserRepository;
+import com.devcamp.shop24h.service.CustomerExcelExporter;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @RestController
@@ -42,6 +50,11 @@ public class CustomerController {
 		}
 	}
 
+	/**
+	 * Lấy dữ liệu customer theo ID
+	 * @param id
+	 * @return
+	 */
 	@GetMapping("/customer/{id}")
 	public ResponseEntity<Object> getCustomerById(@PathVariable int id) {
 		try {
@@ -50,6 +63,30 @@ public class CustomerController {
 			System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	/**
+	 * Export dữ liệu Customers ra Excel
+	 * @param response
+	 * @throws IOException
+	 */
+	@GetMapping("/export/customers/excel")
+	public void exportCustomersToExcel(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=customers_" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+
+		List<Customer> customers = new ArrayList<Customer>();
+
+		pCustomerRepository.findAll().forEach(customers::add);
+
+		CustomerExcelExporter excelExporter = new CustomerExcelExporter(customers);
+
+		excelExporter.export(response);
 	}
 
 	@PostMapping("/customer")
@@ -99,6 +136,13 @@ public class CustomerController {
 		}
 	}
 
+	/**
+	 * Tạo dữ liệu Customer coupling với User theo username
+	 * API này dùng trong page Check Out của project
+	 * @param cCustomer
+	 * @param username
+	 * @return
+	 */
 	@PostMapping("/customer/{username}")
 	public ResponseEntity<Object> createCustomerByUsername(@RequestBody @Valid Customer cCustomer,
 			@PathVariable String username) {
