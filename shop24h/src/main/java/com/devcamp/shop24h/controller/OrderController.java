@@ -1,7 +1,14 @@
 package com.devcamp.shop24h.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +28,16 @@ import com.devcamp.shop24h.model.Customer;
 import com.devcamp.shop24h.model.Order;
 import com.devcamp.shop24h.repository.CustomerRepository;
 import com.devcamp.shop24h.repository.OrderRepository;
+import com.devcamp.shop24h.service.CustomerExcelExporter;
+import com.devcamp.shop24h.service.OrderExcelExporter;
 
 @RestController
 @CrossOrigin
 public class OrderController {
+	
 	@Autowired
 	private OrderRepository pOrderRepository;
+	
 	@Autowired
 	private CustomerRepository pCustomerRepository;
 	
@@ -79,6 +90,31 @@ public class OrderController {
 			System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	
+	/**
+	 * Export data of Orders to Excel
+	 * @param response
+	 * @throws IOException
+	 */
+	@GetMapping("/export/orders/excel")
+	public void exportOrdersToExcel(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=orders_" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+
+		List<Order> order = new ArrayList<Order>();
+
+		pOrderRepository.findAll().forEach(order::add);
+
+		OrderExcelExporter excelExporter = new OrderExcelExporter(order);
+
+		excelExporter.export(response);
 	}
 	
 	

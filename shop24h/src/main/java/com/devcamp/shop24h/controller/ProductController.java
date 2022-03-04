@@ -1,7 +1,14 @@
 package com.devcamp.shop24h.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +24,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devcamp.shop24h.model.OrderDetail;
 import com.devcamp.shop24h.model.Product;
 import com.devcamp.shop24h.model.ProductLine;
 import com.devcamp.shop24h.repository.ProductLineRepository;
 import com.devcamp.shop24h.repository.ProductRepository;
+import com.devcamp.shop24h.service.OrderDetailExcelExporter;
+import com.devcamp.shop24h.service.ProductExcelExporter;
 
 @RestController
 @CrossOrigin
 public class ProductController {
+	
 	@Autowired
 	private ProductRepository pProductRepository;
 
@@ -41,6 +52,7 @@ public class ProductController {
 		}
 	}
 
+	
 	@GetMapping("/product/{id}")
 	public ResponseEntity<Object> getProductById(@PathVariable int id) {
 		try {
@@ -125,6 +137,31 @@ public class ProductController {
 		return new ResponseEntity<>(pProductRepository.timProductByNameAndSize(productName, size), HttpStatus.OK);
 	}
  
+	/**
+	 * Export Products data to Excel
+	 * @param response
+	 * @throws IOException
+	 */
+	@GetMapping("/export/products/excel")
+	public void exportOrderDetailsToExcel(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=products_" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+
+		List<Product> products = new ArrayList<Product>();
+
+		pProductRepository.findAll().forEach(products::add);
+
+		ProductExcelExporter excelExporter = new ProductExcelExporter(products);
+
+		excelExporter.export(response);
+	}
+	
+	
 	@PostMapping("/product/{productLineId}")
 	public ResponseEntity<Object> createProductByProductLineId(@Valid @RequestBody Product cProduct,
 			@PathVariable Integer productLineId) {

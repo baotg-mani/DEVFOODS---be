@@ -1,7 +1,14 @@
 package com.devcamp.shop24h.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +29,19 @@ import com.devcamp.shop24h.model.Product;
 import com.devcamp.shop24h.repository.OrderDetailRepository;
 import com.devcamp.shop24h.repository.OrderRepository;
 import com.devcamp.shop24h.repository.ProductRepository;
+import com.devcamp.shop24h.service.OrderDetailExcelExporter;
+import com.devcamp.shop24h.service.OrderExcelExporter;
 
 @RestController
 @CrossOrigin
 public class OrderDetailController {
+
 	@Autowired
 	private ProductRepository pProductRepository;
+
 	@Autowired
 	private OrderRepository pOrderRepository;
+
 	@Autowired
 	private OrderDetailRepository pOrderDetailRepository;
 
@@ -52,7 +64,7 @@ public class OrderDetailController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/order-detail/orderId/{orderId}")
 	public ResponseEntity<Object> getOrderDetailsByOrderId(@PathVariable int orderId) {
 		try {
@@ -73,19 +85,43 @@ public class OrderDetailController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	// Get data cho báo cáo tổng tiền theo 4 tuần gần nhất (bar chart)
-		@GetMapping("/order-detail/weeks")
-		public ResponseEntity<Object> getDataBarChartByWeek() {
-			try {
-				return new ResponseEntity<>(pOrderDetailRepository.findDataBarChartByWeek(), HttpStatus.OK);
-			} catch (Exception e) {
-				System.out.println(e);
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+	@GetMapping("/order-detail/weeks")
+	public ResponseEntity<Object> getDataBarChartByWeek() {
+		try {
+			return new ResponseEntity<>(pOrderDetailRepository.findDataBarChartByWeek(), HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
 	
-	
+	/**
+	 * Export Order Details data to Excel
+	 * @param response
+	 * @throws IOException
+	 */
+	@GetMapping("/export/orderDetails/excel")
+	public void exportOrderDetailsToExcel(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=order-details_" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+
+		List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
+
+		pOrderDetailRepository.findAll().forEach(orderDetails::add);
+
+		OrderDetailExcelExporter excelExporter = new OrderDetailExcelExporter(orderDetails);
+
+		excelExporter.export(response);
+	}
+
 	@PostMapping("/order-detail/{orderId}/{productId}")
 	public ResponseEntity<Object> createOrderDetailByOrderIdAndProductId(@Valid @PathVariable Integer orderId,
 			@PathVariable Integer productId, @RequestBody @Valid OrderDetail cOrderDetail) {
@@ -112,7 +148,8 @@ public class OrderDetailController {
 	}
 
 	@PutMapping("/order-detail/{id}")
-	public ResponseEntity<Object> updateOrderDetail(@Valid @PathVariable Integer id, @RequestBody OrderDetail cOrderDetail) {
+	public ResponseEntity<Object> updateOrderDetail(@Valid @PathVariable Integer id,
+			@RequestBody OrderDetail cOrderDetail) {
 		Optional<OrderDetail> orderDetailData = pOrderDetailRepository.findById(id);
 		if (orderDetailData.isPresent()) {
 			try {
