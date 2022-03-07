@@ -175,9 +175,10 @@ public class CustomerController {
 			}
 		}
 
-		if (!userData.get().getCustomer().getPhoneNumber().equals(cCustomer.getPhoneNumber())) {
+		String phoneInDb = userData.get().getCustomer().getPhoneNumber();
+		if (!phoneInDb.equals(cCustomer.getPhoneNumber())) {
 			// nếu sđt input không trùng với sđt đã có trong DB => báo cho user
-			return new ResponseEntity<>("Wrong phone number", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Wrong phone number! Your used phone number is " + phoneInDb, HttpStatus.INTERNAL_SERVER_ERROR);
 		} else {
 			// nếu sđt input trùng với sđt đã có trong DB, update dữ liệu 
 			Customer updateObj = customerData.get();
@@ -231,12 +232,12 @@ public class CustomerController {
 		}
 	}
 
-	@DeleteMapping("/customer/{id}")
+	@DeleteMapping("/customer/delete/{id}")
 	public ResponseEntity<Object> deleteCustomerById(@PathVariable Integer id) {
 		if (pCustomerRepository.findById(id).isPresent()) {
 			try {
 				pCustomerRepository.deleteById(id);
-				return new ResponseEntity<>(pCustomerRepository.findAll(), HttpStatus.OK);
+				return new ResponseEntity<>(pCustomerRepository.findAll().size(), HttpStatus.OK);
 			} catch (Exception e) {
 				System.out.println(e);
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -245,5 +246,17 @@ public class CustomerController {
 			System.out.println("Id not found");
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	/**
+	 * method này dùng trong project, không dùng đc deleteById (default) 
+	 * vì quan hệ customer vs user (1-1) ngầm là Eager nên vẫn persist không xóa được
+	 * @param id
+	 * @return
+	 */
+	@DeleteMapping("/customer/{id}")
+	public ResponseEntity<Object> deleteCustomerOfUser(@PathVariable Integer id) {
+		pCustomerRepository.delById(id);
+		return new ResponseEntity<Object> ("deleted successfully", HttpStatus.OK);
 	}
 }

@@ -37,8 +37,15 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 	@Query(value = "SELECT * FROM customers  ORDER BY customers.id DESC", nativeQuery = true)
 	List<Customer> findAllCustomer();
 
-	// query ra bảng số customer của 4 country USA, France, Singapore, Spain để làm
-	// bar chart
+	/*
+	 * query ra bảng số customer của 4 country USA, France, Singapore, Spain để làm
+	 * bar chart
+	 */
 	@Query(value = "SELECT country, COUNT(country) AS customers_number FROM customers WHERE country = 'usa' OR country = 'france' OR country = 'singapore' OR country = 'spain' GROUP BY country", nativeQuery = true)
 	List<Object> numberCusOf4Countries();
+	
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM customers WHERE id = :paramId", nativeQuery = true)
+	void delById(@Param("paramId") Integer id);
 }
