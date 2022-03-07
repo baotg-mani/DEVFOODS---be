@@ -70,7 +70,7 @@ public class Customer {
 	private List<Payment> payments;
 	
 	@JsonIgnoreProperties(value = "customer")
-	@OneToOne
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "user_id")
 	private User user;
 

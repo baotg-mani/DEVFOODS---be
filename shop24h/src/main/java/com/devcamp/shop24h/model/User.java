@@ -21,7 +21,7 @@ public class User extends BaseEntity {
     private Set<Role> roles = new HashSet<>();
     
     
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "user")
 //    @JsonManagedReference
     private Customer customer;
